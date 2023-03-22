@@ -1,6 +1,5 @@
 const Joi = require("joi");
-const mongoose = require("mongoose");
-const contactModel = require("../models/contactModel");
+const { ContactModel } = require("../models");
 
 async function addValidation(req, res, next) {
   const schema = Joi.object({
@@ -17,9 +16,9 @@ async function addValidation(req, res, next) {
     favorite: Joi.boolean(),
   });
 
-  const userExists = await contactModel.exists({ email: req.body.email });
+  const contactExists = await ContactModel.exists({ email: req.body.email });
 
-  if (userExists) {
+  if (contactExists) {
     return res.status(409).json({ message: "Conflict in the request" });
   }
 
@@ -55,15 +54,7 @@ function updateValidation(req, res, next) {
   next();
 }
 
-function mongoIdValidation(req, res, next) {
-  if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
-    return res.status(400).json({ message: "Invalid contact ID" });
-  }
-  next();
-}
-
 module.exports = {
   addValidation,
   updateValidation,
-  mongoIdValidation,
 };
