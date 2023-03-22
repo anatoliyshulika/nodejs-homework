@@ -4,6 +4,7 @@ const {
   loginUser,
   logoutUser,
   currentUser,
+  changeSubscription,
 } = require("../controllers");
 const { createUserValidation } = require("../validators");
 const { authMiddleware } = require("../middlewares");
@@ -14,5 +15,6 @@ router.post("/register", createUserValidation, createUser);
 router.post("/login", loginUser);
 router.post("/logout", authMiddleware, logoutUser);
 router.get("/current", authMiddleware, currentUser);
+router.patch("/", authMiddleware, changeSubscription);
 
 module.exports = router;

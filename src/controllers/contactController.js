@@ -1,8 +1,14 @@
 const { ContactModel } = require("../models");
-const { asyncErrorHandler } = require("../utils");
+const {
+  asyncErrorHandler,
+  paginationRequest,
+  searchParamsRequest,
+} = require("../utils");
 
 const getContacts = asyncErrorHandler(async (req, res, next) => {
-  const data = await ContactModel.find({ owner: req.user.id });
+  const searchParams = searchParamsRequest(req, res);
+  const { perPage, skip } = paginationRequest(req, res);
+  const data = await ContactModel.find(searchParams).skip(skip).limit(perPage);
   res.status(200).json(data);
 });
 
@@ -24,7 +30,7 @@ const removeContact = asyncErrorHandler(async (req, res, next) => {
     owner: req.user.id,
   });
   if (data.deletedCount) {
-    res.status(200).json({ message: "The contact was deleted successfully" });
+    res.status(200).json({ message: "The contact was deleted successfully." });
   } else {
     res.status(404).json({ message: "Not found" });
   }

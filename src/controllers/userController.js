@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const { UserModel } = require("../models");
 const { asyncErrorHandler, createToken } = require("../utils");
+const { SUBSCRIPTION_TYPE } = require("../data");
 
 const createUser = asyncErrorHandler(async (req, res) => {
   const user = new UserModel(req.body);
@@ -51,4 +52,25 @@ const currentUser = asyncErrorHandler(async (req, res) => {
   res.status(200).json(user);
 });
 
-module.exports = { createUser, loginUser, logoutUser, currentUser };
+const changeSubscription = asyncErrorHandler(async (req, res) => {
+  const user = await UserModel.findById(req.user.id);
+  if (!user) {
+    return res.status(401).json({ message: "Not authorized" });
+  }
+
+  const subscriptions = Object.values(SUBSCRIPTION_TYPE);
+  if (subscriptions.includes(req.body.subscriptionType)) {
+    user.subscription = req.body.subscriptionType;
+    user.save();
+  }
+
+  res.status(200).json(user);
+});
+
+module.exports = {
+  createUser,
+  loginUser,
+  logoutUser,
+  currentUser,
+  changeSubscription,
+};
