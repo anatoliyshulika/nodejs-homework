@@ -6,15 +6,17 @@ const {
   removeContact,
   updateContact,
   toggleFavoriteContact,
-} = require("../../controllers/contactController");
+} = require("../controllers");
 const {
   addValidation,
   updateValidation,
   mongoIdValidation,
-} = require("../../utils/validation");
+} = require("../validators");
+const { authMiddleware } = require("../middlewares");
 
 const router = express.Router();
 
+router.use(authMiddleware);
 router.get("/", getContacts);
 router.get("/:contactId", mongoIdValidation, getContactById);
 router.delete("/:contactId", mongoIdValidation, removeContact);
