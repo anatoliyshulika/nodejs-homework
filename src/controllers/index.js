@@ -13,6 +13,7 @@ const {
   currentUser,
   changeSubscription,
 } = require("./userController");
+const { uploadFile, upload } = require("./filesController");
 
 module.exports = {
   getContacts,
@@ -26,4 +27,6 @@ module.exports = {
   logoutUser,
   currentUser,
   changeSubscription,
+  uploadFile,
+  upload,
 };

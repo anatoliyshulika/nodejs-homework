@@ -5,6 +5,8 @@ const {
   logoutUser,
   currentUser,
   changeSubscription,
+  uploadFile,
+  upload,
 } = require("../controllers");
 const { createUserValidation } = require("../validators");
 const { authMiddleware } = require("../middlewares");
@@ -16,5 +18,6 @@ router.post("/login", loginUser);
 router.post("/logout", authMiddleware, logoutUser);
 router.get("/current", authMiddleware, currentUser);
 router.patch("/", authMiddleware, changeSubscription);
+router.patch("/avatars", authMiddleware, upload.single("avatar"), uploadFile);
 
 module.exports = router;
