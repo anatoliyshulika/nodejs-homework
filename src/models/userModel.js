@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const gravatar = require("gravatar");
 const SUBSCRIPTION_TYPE = require("../data");
 
 const Schema = mongoose.Schema;
@@ -25,6 +26,7 @@ const UserSchema = new Schema({
     type: String,
     default: null,
   },
+  avatarURL: String,
 });
 
 UserSchema.pre("save", async function () {
@@ -32,6 +34,13 @@ UserSchema.pre("save", async function () {
     const salt = bcrypt.genSaltSync(+process.env.SALT_ROUNDS);
     const hash = bcrypt.hashSync(this.password, salt);
     this.password = hash;
+
+    const hashEmail = gravatar.url(
+      this.email,
+      { s: "200", r: "x", d: "robohash" },
+      true
+    );
+    this.avatarURL = hashEmail;
   }
 });
 
