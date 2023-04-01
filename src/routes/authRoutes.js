@@ -1,6 +1,8 @@
 const express = require("express");
 const {
   createUser,
+  resendingEmail,
+  emailConfirmation,
   loginUser,
   logoutUser,
   currentUser,
@@ -14,6 +16,8 @@ const { authMiddleware } = require("../middlewares");
 const router = express.Router();
 
 router.post("/register", createUserValidation, createUser);
+router.get("/verify/:verificationToken", emailConfirmation);
+router.post("/verify", resendingEmail);
 router.post("/login", loginUser);
 router.post("/logout", authMiddleware, logoutUser);
 router.get("/current", authMiddleware, currentUser);
