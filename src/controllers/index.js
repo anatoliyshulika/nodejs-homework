@@ -8,6 +8,8 @@ const {
 } = require("./contactController");
 const {
   createUser,
+  resendingEmail,
+  emailConfirmation,
   loginUser,
   logoutUser,
   currentUser,
@@ -23,6 +25,8 @@ module.exports = {
   updateContact,
   toggleFavoriteContact,
   createUser,
+  resendingEmail,
+  emailConfirmation,
   loginUser,
   logoutUser,
   currentUser,
